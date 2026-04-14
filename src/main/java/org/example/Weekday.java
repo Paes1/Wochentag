@@ -1,7 +1,13 @@
 package org.example;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 public enum Weekday {
-  MONDAY {
+  MONDAY("montag") {
     @Override
     public boolean isWeekday() {
       return true;
@@ -12,7 +18,7 @@ public enum Weekday {
       return true;
     }
   },
-  TUESDAY {
+  TUESDAY("dienstag") {
     @Override
     public boolean isWeekday() {
       return true;
@@ -23,7 +29,7 @@ public enum Weekday {
       return true;
     }
   },
-  WEDNESDAY {
+  WEDNESDAY("mittwoch") {
     @Override
     public boolean isWeekday() {
       return true;
@@ -34,7 +40,7 @@ public enum Weekday {
       return true;
     }
   },
-  THURSDAY {
+  THURSDAY("donnerstag") {
     @Override
     public boolean isWeekday() {
       return true;
@@ -45,7 +51,7 @@ public enum Weekday {
       return true;
     }
   },
-  FRIDAY {
+  FRIDAY("freitag") {
     @Override
     public boolean isWeekday() {
       return true;
@@ -56,7 +62,7 @@ public enum Weekday {
       return true;
     }
   },
-  SATURDAY {
+  SATURDAY("samstag") {
     @Override
     public boolean isWeekday() {
       return false;
@@ -67,7 +73,7 @@ public enum Weekday {
       return true;
     }
   },
-  SUNDAY {
+  SUNDAY("sonntag") {
     @Override
     public boolean isWeekday() {
       return false;
@@ -78,6 +84,24 @@ public enum Weekday {
       return false;
     }
   };
+  private static final Map<String, Weekday> weekdays =
+      Arrays.stream(Weekday.values())
+          .collect(
+              Collectors.toUnmodifiableMap(weekday -> weekday.displayName, Function.identity()));
+
+  private final String displayName;
+
+  Weekday(String displayName) {
+    this.displayName = displayName;
+  }
+
+  public static Optional<Weekday> parse(String weekday) {
+    try {
+      return Optional.of(Weekday.valueOf(weekday.toUpperCase()));
+    } catch (IllegalArgumentException e) {
+      return Optional.ofNullable(weekdays.get(weekday.toLowerCase()));
+    }
+  }
 
   public abstract boolean isWeekday();
 
