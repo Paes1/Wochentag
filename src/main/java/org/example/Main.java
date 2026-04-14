@@ -11,14 +11,13 @@ public class Main {
     }
   }
 
-  static boolean parseWeekday() {
+  private static boolean parseWeekday() {
     System.out.println("Enter in Weekday: ");
-    String weekdayString = scanner.nextLine();
-    return Weekday.parse(weekdayString)
+    return Weekday.parse(scanner.nextLine())
         .map(
             weekday -> {
               System.out.println("Weekday: " + weekday.isWeekday());
-              System.out.println("Laborday: " + weekday.isLaborday());
+              System.out.println("Laborday: " + weekday.isLaborDay());
               return true;
             })
         .orElse(false);

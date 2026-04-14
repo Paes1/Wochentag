@@ -7,103 +7,51 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public enum Weekday {
-  MONDAY("montag") {
-    @Override
-    public boolean isWeekday() {
-      return true;
-    }
+  MONDAY("Montag", true, true),
+  TUESDAY("Dienstag", true, true),
+  WEDNESDAY("Mittwoch", true, true),
+  THURSDAY("Donnerstag", true, true),
+  FRIDAY("Freitag", true, true),
+  SATURDAY("Samstag", false, true),
+  SUNDAY("Sonntag", false, false);
 
-    @Override
-    public boolean isLaborday() {
-      return true;
-    }
-  },
-  TUESDAY("dienstag") {
-    @Override
-    public boolean isWeekday() {
-      return true;
-    }
-
-    @Override
-    public boolean isLaborday() {
-      return true;
-    }
-  },
-  WEDNESDAY("mittwoch") {
-    @Override
-    public boolean isWeekday() {
-      return true;
-    }
-
-    @Override
-    public boolean isLaborday() {
-      return true;
-    }
-  },
-  THURSDAY("donnerstag") {
-    @Override
-    public boolean isWeekday() {
-      return true;
-    }
-
-    @Override
-    public boolean isLaborday() {
-      return true;
-    }
-  },
-  FRIDAY("freitag") {
-    @Override
-    public boolean isWeekday() {
-      return true;
-    }
-
-    @Override
-    public boolean isLaborday() {
-      return true;
-    }
-  },
-  SATURDAY("samstag") {
-    @Override
-    public boolean isWeekday() {
-      return false;
-    }
-
-    @Override
-    public boolean isLaborday() {
-      return true;
-    }
-  },
-  SUNDAY("sonntag") {
-    @Override
-    public boolean isWeekday() {
-      return false;
-    }
-
-    @Override
-    public boolean isLaborday() {
-      return false;
-    }
-  };
-  private static final Map<String, Weekday> weekdays =
+  private static final Map<String, Weekday> WEEKDAYS =
       Arrays.stream(Weekday.values())
           .collect(
-              Collectors.toUnmodifiableMap(weekday -> weekday.displayName, Function.identity()));
+              Collectors.toUnmodifiableMap(
+                  weekday -> weekday.displayName.toUpperCase(), Function.identity()));
 
   private final String displayName;
+  private final boolean weekday;
+  private final boolean laborDay;
 
-  Weekday(String displayName) {
+  Weekday(final String displayName, final boolean weekday, final boolean laborDay) {
     this.displayName = displayName;
+    this.weekday = weekday;
+    this.laborDay = laborDay;
   }
 
-  public static Optional<Weekday> parse(String weekday) {
+  public static Optional<Weekday> parse(final String weekday) {
+    if (weekday == null) {
+      return Optional.empty();
+    }
+    final String weekDayUpperCase = weekday.toUpperCase();
     try {
-      return Optional.of(Weekday.valueOf(weekday.toUpperCase()));
+      return Optional.of(Weekday.valueOf(weekDayUpperCase));
     } catch (IllegalArgumentException e) {
-      return Optional.ofNullable(weekdays.get(weekday.toLowerCase()));
+      return Optional.ofNullable(WEEKDAYS.get(weekDayUpperCase));
     }
   }
 
-  public abstract boolean isWeekday();
+  public String getDisplayName() {
+    return displayName;
+  }
 
-  public abstract boolean isLaborday();
+  public boolean isWeekday() {
+    return weekday;
+  }
+
+  public boolean isLaborDay() {
+    return laborDay;
+  }
 }
